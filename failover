@@ -1,0 +1,48 @@
+#!/bin/sh /etc/rc.common
+# ==========================================================
+# failover 服务的 procd 启动脚本
+# 用法：
+#   service failover enable    # 设置开机自启
+#   service failover start     # 启动
+#   service failover stop      # 停止
+#   service failover restart   # 重启
+#   service failover status    # 查看运行状态
+# ==========================================================
+
+START=99      # 启动顺序，数字越大越靠后启动（尽量确保网络已就绪）
+STOP=10
+
+USE_PROCD=1
+
+# 实际监控脚本的完整路径，按需修改
+PROG="/etc/storage/scripts/failover.sh"
+
+start_service() {
+    [ -x "$PROG" ] || {
+        logger -t failover-init "启动失败：$PROG 不存在或没有执行权限"
+        return 1
+    }
+
+    procd_open_instance
+    procd_set_param command /bin/sh "$PROG"
+
+    # 崩溃后自动重启：3600秒内最多重试5次，每次重试间隔5秒
+    procd_set_param respawn 3600 5 5
+
+    # 把脚本自身的stdout/stderr也接入系统日志，方便用 logread 统一查看
+    procd_set_param stdout 1
+    procd_set_param stderr 1
+
+    procd_close_instance
+}
+
+stop_service() {
+    # failover.sh内部用trap捕获了TERM信号会自动清理锁文件，
+    # 这里procd发送TERM即可正常触发脚本退出
+    :
+}
+
+reload_service() {
+    stop
+    start
+}
