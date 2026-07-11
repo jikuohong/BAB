@@ -9,6 +9,8 @@
 #   - 开机启动时会先真实探测一次主路由状态，再决定初始动作，
 #     不会想当然地假设主路由一定在线或离线
 # 用法：
+# 实际监控脚本的完整路径，按需修改
+# "/etc/storage/scripts/failover.sh"配合failover文件使用
 #   service failover enable    # 设置开机自启
 #   service failover start     # 启动
 #   service failover stop      # 停止
