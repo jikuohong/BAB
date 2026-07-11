@@ -1,7 +1,7 @@
 #!/bin/sh /etc/rc.common
 # ==========================================================
 # failover 服务的 procd 启动脚本
-# 用法：
+# 用法：存在/etc/init.d/目录下failover
 #   service failover enable    # 设置开机自启
 #   service failover start     # 启动
 #   service failover stop      # 停止
