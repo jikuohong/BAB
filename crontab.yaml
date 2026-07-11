@@ -1,0 +1,11 @@
+crontab -e
+
+# luci-app-daede daed-sub-update
+17 8 * * * /usr/share/luci-app-daede/daed-sub-update.sh >/dev/null 2>&1
+# luci-app-daede geo-update
+17 4 * * * /usr/share/luci-app-daede/update-geo.sh geoip; /usr/share/luci-app-daede/update-geo.sh geosite
+
+
+0 3 * * * /bin/bash /mnt/sata2-6/docker/cf-SpeedTest/claude_push_test.sh
+
+50 4 * * * /bin/bash /mnt/sata2-6/docker/cf-SpeedTest/claude_push.sh
